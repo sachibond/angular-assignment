@@ -1,0 +1,104 @@
+<mat-toolbar>
+  <span>Server Application</span>
+</mat-toolbar>
+<div class="wrapper-conatiner">
+  <form [formGroup]="myForm" (ngSubmit)="submitForm()" class="form-container">
+    <div class="filter-item">
+      <mat-label>Select Storage</mat-label>
+      <ngx-slider
+        formControlName="sliderControl"
+        [options]="options"
+      ></ngx-slider>
+    </div>
+    <div class="filter-item ram-container">
+      <div *ngFor="let item of ram">
+        <mat-checkbox (change)="onChange(item, $event.checked)">{{ 
+          item.name
+        }}</mat-checkbox>
+      </div>
+    </div>
+    <div class="filter-item">
+      <div>
+        <mat-form-field appearance="fill">
+          <mat-label>HDD</mat-label>
+          <mat-select  formControlName="hddChoice" multiple>
+            <mat-option *ngFor="let item of hddData" [value]="item.value">{{
+              item.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill">
+          <mat-label>Location</mat-label>
+          <mat-select  formControlName="locationChoice" multiple>
+            <mat-option *ngFor="let item of location" [value]="item.value">{{
+              item.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="filter-item">
+      <button type="submit" mat-raised-button >Submit</button>
+    </div>
+  </form>
+  <mat-divider class="mrg-top-20"></mat-divider>
+  <div class="server-container">
+    <ng-container *ngIf="serverDetail && serverDetail.length > 0; else noData">
+      <div class="server-detail-wrapper-container">
+        <div class="flex-container server-detail-container">
+          <mat-card class="server-card" *ngFor="let item of pageSlice">
+            <mat-card-header>
+              <mat-card-title> {{ item.model }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-container server-card-detail">
+                <div class="server-card-detail-text">RAM</div>
+                <div class="server-card-detail-value">
+                  {{ item.ram.memory }}{{ item.ram.unit }} {{ item.ram.type }}
+                </div>
+              </div>
+              <div class="flex-container server-card-detail">
+                <div class="server-card-detail-text">HDD</div>
+                <div class="server-card-detail-value">
+                  {{ item.hdd.count }}X{{ item.hdd.memory }}{{ item.hdd.unit }}
+                  {{ item.hdd.type }}
+                </div>
+              </div>
+              <div class="flex-container server-card-detail">
+                <div class="server-card-detail-text">Location</div>
+                <div class="server-card-detail-value">
+                  {{ item.location }}
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="flex-container server-card-detail">
+                <div class="server-card-detail-text">Price</div>
+                <div class="server-card-detail-value">
+                  {{
+                    item.price.amountCents
+                      | currency: item.price.currencySymbol:"symbol-narrow"
+                  }}
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="pagination-container">
+          <mat-paginator
+            [length]="serverDetail.length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOption"
+            (page)="onPageChnage($event)"
+          >
+          </mat-paginator>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noData>
+      <mat-card> No Data</mat-card>
+    </ng-template>
+  </div>
+</div>
