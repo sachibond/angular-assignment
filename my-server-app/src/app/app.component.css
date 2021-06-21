@@ -64,3 +64,8 @@ mat-grid-tile {
 .mrg-top-20 {
   margin-top: 20px;
 }
+
+.spinner {
+  display: flex;
+  justify-content: center;
+}

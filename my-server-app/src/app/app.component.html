@@ -45,6 +45,7 @@
     </div>
   </form>
   <mat-divider class="mrg-top-20"></mat-divider>
+  <div class="spinner mrg-top-20"><mat-spinner *ngIf="showSpinner"></mat-spinner></div>
   <div class="server-container">
     <ng-container *ngIf="serverDetail && serverDetail.length > 0; else noData">
       <div class="server-detail-wrapper-container">

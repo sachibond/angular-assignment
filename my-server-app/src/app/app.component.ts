@@ -57,6 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
     ],
   };
   public ramArray: FormArray[] = [];
+  public showSpinner: boolean = false;
   private _subscription: Subscription = new Subscription();
 
   myForm = new FormGroup({
@@ -71,19 +72,24 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
+    this.showSpinner = true;
     this._subscription.add(
       this._serverService.getServerDetail().subscribe(
         (data: Server) => {
           this.serverDetail = data.servers;
           this.pageSlice = this.serverDetail.slice(ZERO, this.pageSize);
+          this.showSpinner = false;
           this._ref.markForCheck();
         },
-        (err) => console.log('HTTP Error', err)
+        (err) => {
+          this.showSpinner = false;
+          console.log('HTTP Error', err);
+        }
       )
     );
   }
 
-  public onChange(data: CheckboxSelection, event: boolean):void {
+  public onChange(data: CheckboxSelection, event: boolean): void {
     const ramArray: FormArray = <FormArray>this.myForm.get('ramChoice');
 
     if (event) {
@@ -94,7 +100,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onPageChnage(event: PageEvent):void {
+  public onPageChnage(event: PageEvent): void {
     const startIndex = event.pageIndex * event.pageSize;
     let endIndex = startIndex + event.pageSize;
     if (endIndex > this.serverDetail.length) {
@@ -103,12 +109,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.pageSlice = this.serverDetail.slice(startIndex, endIndex);
   }
 
-  public submitForm():void {
+  public submitForm(): void {
     this._subscription.add(
       this._serverService.getFilterServerDetail(this.myForm.value).subscribe(
         (data) => {
           this.serverDetail = data.servers;
           this.pageSlice = this.serverDetail.slice(ZERO, this.pageSize);
+
           this._ref.markForCheck();
         },
         (err) => console.log('HTTP Error', err)
@@ -116,7 +123,7 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  public ngOnDestroy():void {
+  public ngOnDestroy(): void {
     this._subscription.unsubscribe();
   }
 }
