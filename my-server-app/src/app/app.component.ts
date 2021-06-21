@@ -83,7 +83,7 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  public onChange(data: CheckboxSelection, event: boolean) {
+  public onChange(data: CheckboxSelection, event: boolean):void {
     const ramArray: FormArray = <FormArray>this.myForm.get('ramChoice');
 
     if (event) {
@@ -94,7 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onPageChnage(event: PageEvent) {
+  public onPageChnage(event: PageEvent):void {
     const startIndex = event.pageIndex * event.pageSize;
     let endIndex = startIndex + event.pageSize;
     if (endIndex > this.serverDetail.length) {
@@ -103,7 +103,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.pageSlice = this.serverDetail.slice(startIndex, endIndex);
   }
 
-  public submitForm() {
+  public submitForm():void {
     this._subscription.add(
       this._serverService.getFilterServerDetail(this.myForm.value).subscribe(
         (data) => {
@@ -116,7 +116,7 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy():void {
     this._subscription.unsubscribe();
   }
 }
